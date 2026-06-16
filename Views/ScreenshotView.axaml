@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ShiroBot.AvaloniaDemoPlugin.Views"
+              x:Class="ShiroBot.AvaloniaDemoPlugin.Views.ScreenshotView"
+             x:DataType="vm:ScreenshotViewModel"
+             Width="540" Height="280">
+    
+    <Design.DataContext>
+        <vm:ScreenshotViewModel/>
+    </Design.DataContext>
+    
+    <UserControl.Resources>
+      <ResourceDictionary>
+          <ResourceDictionary.ThemeDictionaries>
+              <ResourceDictionary x:Key="Light">
+                  <SolidColorBrush x:Key="Background" Color="#E6EDF5" />
+                  <SolidColorBrush x:Key="Foreground" Color="#000000" />
+              </ResourceDictionary>
+              <ResourceDictionary x:Key="Dark">
+                  <SolidColorBrush x:Key="Background" Color="#EEE6F0" />
+                  <SolidColorBrush x:Key="Foreground" Color="#FFFFFF" />
+              </ResourceDictionary>
+          </ResourceDictionary.ThemeDictionaries>
+      </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <Border CornerRadius="18" Padding="28"
+            Background="{DynamicResource Background}">
+        <DockPanel LastChildFill="True">
+            <TextBlock DockPanel.Dock="Top"
+                       Text="{Binding Title}"
+                       FontSize="26"
+                       FontWeight="Bold"/>
+
+            <TextBlock DockPanel.Dock="Bottom"
+                       Text="{Binding Footer}"
+                       FontSize="12"
+                       Foreground="#80E0A0"
+                       Margin="0,16,0,0" />
+
+            <StackPanel Spacing="10" Margin="0,16,0,0">
+                <TextBlock Text="{Binding RequestedBy, StringFormat='请求者: {0}'}"
+                           FontSize="16"/>
+                <TextBlock Text="{Binding Timestamp, StringFormat='生成时间: {0}'}"
+                           FontSize="14"/>
+                <TextBlock Text="✅ 这是来自独立 .axaml 文件的 UserControl 哈喽"
+                           FontSize="13"
+                           Foreground="#80E0A0" />
+            </StackPanel>
+        </DockPanel>
+    </Border>
+</UserControl>
