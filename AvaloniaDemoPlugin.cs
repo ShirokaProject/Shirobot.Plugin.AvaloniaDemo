@@ -9,15 +9,16 @@ namespace ShiroBot.AvaloniaDemoPlugin;
 
 /// <summary>
 /// 演示如何用独立 .axaml + UserControl 渲染图片。
-/// 适合需要 IDE 智能提示、AXAML 调试预览、复杂控件树场景。
+/// 适合需要 IDE 智能提示、axaml 调试预览、复杂控件树场景。
 ///
 /// 命令：
 /// - #render：好友/群聊里发起一次截图
+/// 
 /// </summary>
 
 [BotPlugin(id: "AvaloniaDemoPlugin",
     Name = "AvaloniaDemoPlugin",
-    Version = "0.5.0",
+    Version = "0.6.0",
     Author = "ShirokaProject",
     Category = PluginCategory.Development,
     Description = "演示通过独立 .axaml UserControl + AvaloniaIntegration 渲染图片。",
@@ -30,6 +31,7 @@ public sealed class AvaloniaDemoPlugin : PluginBase
     private AvaloniaDemoPluginConfig? _config;
     protected override Task LoadAsync()
     {
+        BotLog.Error("HELLO123");
         _config = Context.Config.Load<AvaloniaDemoPluginConfig>();
         AllCommands.MapExact("#render", HandleRenderAsync);
         BotLog.Info("[AvaloniaDemoPlugin] 已加载，使用 #render 触发截图。");
@@ -45,7 +47,7 @@ public sealed class AvaloniaDemoPlugin : PluginBase
             _ => 0L
         };
         
-        if (_config is { ShowId: true })
+        if (_config is { ShowId: false })
         {
             id = 0L;
         }
