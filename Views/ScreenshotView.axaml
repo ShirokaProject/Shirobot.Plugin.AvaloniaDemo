@@ -1,52 +1,196 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:ShiroBot.AvaloniaDemoPlugin.Views"
-              x:Class="ShiroBot.AvaloniaDemoPlugin.Views.ScreenshotView"
+             x:Class="ShiroBot.AvaloniaDemoPlugin.Views.ScreenshotView"
              x:DataType="vm:ScreenshotViewModel"
-             Width="540" Height="280">
+             Width="360" Height="640">
     
     <Design.DataContext>
         <vm:ScreenshotViewModel/>
     </Design.DataContext>
-    
+
+    <!-- 定义深色 & 浅色主题色彩资源 -->
     <UserControl.Resources>
-      <ResourceDictionary>
-          <ResourceDictionary.ThemeDictionaries>
-              <ResourceDictionary x:Key="Light">
-                  <SolidColorBrush x:Key="Background" Color="#E6EDF5" />
-                  <SolidColorBrush x:Key="Foreground" Color="#000000" />
-              </ResourceDictionary>
-              <ResourceDictionary x:Key="Dark">
-                  <SolidColorBrush x:Key="Background" Color="#EEE6F0" />
-                  <SolidColorBrush x:Key="Foreground" Color="#FFFFFF" />
-              </ResourceDictionary>
-          </ResourceDictionary.ThemeDictionaries>
-      </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <!-- 浅色主题 (Light) -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="CardBg">#F4F5F7</SolidColorBrush>
+                    <BoxShadows x:Key="CardShadow">0 12 40 0 #20000000</BoxShadows>
+                    <!-- 顶部和底部渐变阴影调淡，防止画面过黑 -->
+                    <LinearGradientBrush x:Key="TopScrim" StartPoint="0%,0%" EndPoint="0%,100%">
+                        <GradientStop Color="#1A000000" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </LinearGradientBrush>
+                    <LinearGradientBrush x:Key="BottomScrim" StartPoint="0%,0%" EndPoint="0%,100%">
+                        <GradientStop Color="Transparent" Offset="0"/>
+                        <GradientStop Color="#0D000000" Offset="0.4"/>
+                        <GradientStop Color="#26000000" Offset="1"/>
+                    </LinearGradientBrush>
+                    <!-- 中部交互栏背景与边框 -->
+                    <SolidColorBrush x:Key="PanelBg">#E3E8EC</SolidColorBrush>
+                    <SolidColorBrush x:Key="PanelBorder">#D0D7DE</SolidColorBrush>
+                    <!-- 文字颜色 -->
+                    <SolidColorBrush x:Key="TextPrimary">#18191C</SolidColorBrush>
+                    <SolidColorBrush x:Key="TextSecondary">#61666D</SolidColorBrush>
+                    <SolidColorBrush x:Key="TextMuted">#9499A0</SolidColorBrush>
+                    <!-- 标签背景 -->
+                    <SolidColorBrush x:Key="TagBg">#E3E5E7</SolidColorBrush>
+                    <!-- 黄V边框 -->
+                    <SolidColorBrush x:Key="YellowVBorder">White</SolidColorBrush>
+                    <!-- 未激活的分享按钮颜色 -->
+                    <SolidColorBrush x:Key="ShareColor">#61666D</SolidColorBrush>
+                </ResourceDictionary>
+                
+                <!-- 深色主题 (Dark - B站播放器经典暗色调) -->
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="CardBg">Black</SolidColorBrush>
+                    <BoxShadows x:Key="CardShadow">0 12 40 0 #66000000</BoxShadows>
+                    <LinearGradientBrush x:Key="TopScrim" StartPoint="0%,0%" EndPoint="0%,100%">
+                        <GradientStop Color="#A6000000" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </LinearGradientBrush>
+                    <LinearGradientBrush x:Key="BottomScrim" StartPoint="0%,0%" EndPoint="0%,100%">
+                        <GradientStop Color="Transparent" Offset="0"/>
+                        <GradientStop Color="#66000000" Offset="0.4"/>
+                        <GradientStop Color="#F2000000" Offset="1"/>
+                    </LinearGradientBrush>
+                    <SolidColorBrush x:Key="PanelBg">#59000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="PanelBorder">#1AFFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="TextPrimary">White</SolidColorBrush>
+                    <SolidColorBrush x:Key="TextSecondary">#CCFFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="TextMuted">#80FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="TagBg">#1AFFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="YellowVBorder">Black</SolidColorBrush>
+                    <SolidColorBrush x:Key="ShareColor">White</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     
-    <Border CornerRadius="18" Padding="28"
-            Background="{DynamicResource Background}">
-        <DockPanel LastChildFill="True">
-            <TextBlock DockPanel.Dock="Top"
-                       Text="{Binding Title}"
-                       FontSize="26"
-                       FontWeight="Bold"/>
 
-            <TextBlock DockPanel.Dock="Bottom"
-                       Text="{Binding Footer}"
-                       FontSize="12"
-                       Foreground="#80E0A0"
-                       Margin="0,16,0,0" />
+    <!-- 卡片主体外框 -->
+    <Border Width="360" Height="640" 
+            CornerRadius="24" 
+            ClipToBounds="True" 
+            Background="{DynamicResource CardBg}"
+         >
+        
+        <Grid>
+            <!-- 1. 视频背景图 (使用占位图替代) -->
+            <!-- <Image Source="https://picsum.photos/seed/mediastorm123/600/1066"  -->
+            <!--        Stretch="UniformToFill" /> -->
 
-            <StackPanel Spacing="10" Margin="0,16,0,0">
-                <TextBlock Text="{Binding RequestedBy, StringFormat='请求者: {0}'}"
-                           FontSize="16"/>
-                <TextBlock Text="{Binding Timestamp, StringFormat='生成时间: {0}'}"
-                           FontSize="14"/>
-                <TextBlock Text="✅ 这是来自独立 .axaml 文件的 UserControl 哈喽"
-                           FontSize="13"
-                           Foreground="#80E0A0" />
-            </StackPanel>
-        </DockPanel>
+            <!-- 2. 音视频上部半透明渐变阴影 (Scrim) -->
+            <Border VerticalAlignment="Top" Height="112" Background="{DynamicResource TopScrim}"/>
+
+            <!-- 3. 音视频底部半透明渐变阴影 (Scrim) -->
+            <Border VerticalAlignment="Bottom" Height="384" Background="{DynamicResource BottomScrim}"/>
+
+            <!-- 4. 底部主要内容UI布局 -->
+            <DockPanel LastChildFill="True" Margin="16">
+                
+                <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Spacing="12" Margin="0,0,0,4">
+                    
+                    <!-- 1. UP主简介 -->
+                    <StackPanel Spacing="8">
+                        <DockPanel LastChildFill="True">
+                            <!-- UP 主头像及名称信息 -->
+                            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                <!-- 头像及闪电认证标志 -->
+                                <Grid Width="40" Height="40">
+                                    <!-- 圆形头像外框 -->
+                                    <Border CornerRadius="20" BorderBrush="#FB7299" BorderThickness="1.5" ClipToBounds="True">
+                                        <!-- <Image Source="https://api.dicebear.com/7.x/pixel-art/svg?seed=MediaStorm" Width="40" Height="40" Stretch="UniformToFill"/> -->
+                                    </Border>
+                                    <!-- 认证黄V闪电 -->
+                                    <Border Background="#FFB020" Width="14" Height="14" CornerRadius="7" 
+                                            BorderBrush="{DynamicResource YellowVBorder}" BorderThickness="1" 
+                                            HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-2,-2">
+                                        <TextBlock Text="⚡" FontSize="8" Foreground="White" FontWeight="Bold" 
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-1,0,0"/>
+                                    </Border>
+                                </Grid>
+
+                                <!-- 名字与粉丝量 -->
+                                <StackPanel VerticalAlignment="Center" Spacing="1">
+                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                        <TextBlock Text="影视飓风" Foreground="{DynamicResource TextPrimary}" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
+                                        <Border Background="#FB7299" CornerRadius="2" Padding="3,1" Height="12" VerticalAlignment="Center">
+                                            <TextBlock Text="UP" Foreground="White" FontSize="8" FontWeight="ExtraBold" Margin="0,-1.5,0,0"/>
+                                        </Border>
+                                    </StackPanel>
+                                    <TextBlock Text="1418.4万粉丝 · 浙江" Foreground="{DynamicResource TextMuted}" FontSize="9"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <!-- 2. 视频标题与文案 -->
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="拍视频时灯光/屏幕闪烁？来看解决方案！告别频闪✨" 
+                                       Foreground="{DynamicResource TextPrimary}" FontSize="13" FontWeight="Bold" 
+                                       TextWrapping="Wrap" MaxLines="2" LineHeight="18"/>
+                            <TextBlock Text="灯光一直闪、屏幕有条纹？彻底搞懂“频闪”是什么！#摄影科普 #实用技巧" 
+                                       Foreground="{DynamicResource TextSecondary}" FontSize="11" 
+                                       TextWrapping="Wrap" MaxLines="2" LineHeight="16"/>
+                        </StackPanel>
+
+                        <!-- 3. 科普标签 -->
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Border Background="{DynamicResource TagBg}" CornerRadius="4" Padding="8,3">
+                                <TextBlock Text="# 科技猎手计划" Foreground="{DynamicResource TextPrimary}" FontSize="10"/>
+                            </Border>
+                            <Border Background="{DynamicResource TagBg}" CornerRadius="4" Padding="8,3">
+                                <TextBlock Text="# 科普" Foreground="{DynamicResource TextPrimary}" FontSize="10"/>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- 4. 横向交互数据面板 (点赞/投币/收藏/分享) -->
+                    <Border Background="{DynamicResource PanelBg}" BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" CornerRadius="16" Padding="4,8">
+                        <UniformGrid Columns="4">
+                            <!-- 点赞 (粉色) -->
+                            <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                <Path Data="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" 
+                                      Fill="#FB7299" Width="20" Height="20" Stretch="Uniform"/>
+                                <TextBlock Text="17.8万" Foreground="#FB7299" FontSize="10" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- 投币 (蓝色) -->
+                            <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                <Path Data="M14.045 25.5454C7.69377 25.5454 2.54504 20.3967 2.54504 14.0454C2.54504 7.69413 7.69377 2.54541 14.045 2.54541C20.3963 2.54541 25.545 7.69413 25.545 14.0454C25.545 17.0954 24.3334 20.0205 22.1768 22.1771C20.0201 24.3338 17.095 25.5454 14.045 25.5454ZM9.66202 6.81624H18.2761C18.825 6.81624 19.27 7.22183 19.27 7.72216C19.27 8.22248 18.825 8.62807 18.2761 8.62807H14.95V10.2903C17.989 10.4444 20.3766 12.9487 20.3855 15.9916V17.1995C20.3854 17.6997 19.9799 18.1052 19.4796 18.1052C18.9793 18.1052 18.5738 17.6997 18.5737 17.1995V15.9916C18.5667 13.9478 16.9882 12.2535 14.95 12.1022V20.5574C14.95 21.0577 14.5444 21.4633 14.0441 21.4633C13.5437 21.4633 13.1382 21.0577 13.1382 20.5574V12.1022C11.1 12.2535 9.52148 13.9478 9.51448 15.9916V17.1995C9.5144 17.6997 9.10883 18.1052 8.60856 18.1052C8.1083 18.1052 7.70273 17.6997 7.70265 17.1995V15.9916C7.71158 12.9487 10.0992 10.4444 13.1382 10.2903V8.62807H9.66202C9.11309 8.62807 8.66809 8.22248 8.66809 7.72216C8.66809 7.22183 9.11309 6.81624 9.66202 6.81624Z" 
+                                      Fill="#00AEEC" Width="20" Height="20" Stretch="Uniform"/>
+                                <TextBlock Text="8.4万" Foreground="#00AEEC" FontSize="10" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- 收藏 (金黄色) -->
+                            <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                <Path Data="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" 
+                                      Fill="#E79F1D" Width="20" Height="20" Stretch="Uniform"/>
+                                <TextBlock Text="4.4万" Foreground="#E79F1D" FontSize="10" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- 分享 (自适应 share color) -->
+                            <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                <Path Data="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z" 
+                                      Fill="{DynamicResource ShareColor}" Width="20" Height="20" Stretch="Uniform"/>
+                                <TextBlock Text="2.0万" Foreground="{DynamicResource ShareColor}" FontSize="10" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </Border>
+
+                    <!-- 5. 底部播放时长 -->
+                    <TextBlock Text="12:20" 
+                               Foreground="{DynamicResource TextMuted}" 
+                               FontSize="9" 
+                               FontWeight="SemiBold" 
+                               HorizontalAlignment="Right" 
+                               Margin="4,0,4,4"/>
+
+                </StackPanel>
+            </DockPanel>
+        </Grid>
     </Border>
+
+    
 </UserControl>
