@@ -9,6 +9,7 @@
         <ShiroBotAvaloniaPreviewerSupport Condition="'$(Configuration)' != 'Release'">true</ShiroBotAvaloniaPreviewerSupport>
         <UseLocalShiroBotSdk Condition="'$(UseLocalShiroBotSdk)' == ''">true</UseLocalShiroBotSdk>
         <ShiroBotSdkVersion Condition="'$(ShiroBotSdkVersion)' == ''">0.7.0</ShiroBotSdkVersion>
+        <DefaultItemExcludes>$(DefaultItemExcludes);shirobot-core/**</DefaultItemExcludes>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(UseLocalShiroBotSdk)' == 'true' and Exists('../ShiroBot/ShiroBot.SDK/ShiroBot.SDK.csproj')">
