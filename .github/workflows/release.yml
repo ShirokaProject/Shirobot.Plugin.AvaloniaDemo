@@ -42,6 +42,7 @@ jobs:
         run: |
           dotnet pack shirobot-core/ShiroBot.Model/ShiroBot.Model.csproj -c Release -o artifacts/nuget
           dotnet pack shirobot-core/ShiroBot.SDK/ShiroBot.SDK.csproj -c Release -o artifacts/nuget
+          dotnet pack shirobot-core/ShiroBot.AvaloniaSdk/ShiroBot.AvaloniaSdk.csproj -c Release -o artifacts/nuget
 
       - name: Restore
         run: >-

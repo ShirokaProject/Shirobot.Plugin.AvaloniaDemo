@@ -8,7 +8,7 @@
 
 - 使用 Avalonia `UserControl` 渲染 PNG 图片
 - 支持在好友或群聊中通过命令触发截图
-- 只引用统一的 `ShiroBot.SDK`，演示其中的 Avalonia 契约与控件渲染 API
+- 基础能力引用 `ShiroBot.SDK`，Avalonia 控件渲染引用独立的 `ShiroBot.AvaloniaSdk`
 
 ## 命令
 
@@ -36,11 +36,12 @@ dotnet publish -c Release
 dotnet publish -c Release -p:UseLocalShiroBotSdk=false
 ```
 
-项目目标框架为 `net10.0`，只依赖：
+项目目标框架为 `net10.0`，依赖：
 
-- `ShiroBot.SDK` 0.7.0-rc3
+- `ShiroBot.SDK` 0.7.0
+- `ShiroBot.AvaloniaSdk` 0.7.0
 
-如果仓库旁存在 `../ShiroBot/ShiroBot.SDK/ShiroBot.SDK.csproj`，项目会自动使用本地 `ProjectReference` 便于联调；其他环境使用 NuGet 包。
+如果仓库旁存在核心仓库，项目会自动使用两个 SDK 的本地 `ProjectReference` 便于联调；其他环境使用 NuGet 包。
 
 `ShiroBot.SDK` 的 `buildTransitive` targets 会自动生成单 DLL 插件，并从发布目录移除由宿主提供的 SDK、Avalonia 共享程序集与 runtime 文件。项目不需要自行引用 ILRepack 或编写重打包 target。
 

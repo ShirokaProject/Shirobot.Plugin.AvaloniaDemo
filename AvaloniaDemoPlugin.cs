@@ -1,7 +1,7 @@
 using ShiroBot.AvaloniaDemoPlugin.Views;
+using ShiroBot.AvaloniaSdk;
 using ShiroBot.Model.Common;
 using ShiroBot.SDK.Abstractions;
-using ShiroBot.SDK.Avalonia;
 using ShiroBot.SDK.Core;
 using ShiroBot.SDK.Plugin;
 
