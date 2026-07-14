@@ -1,7 +1,7 @@
 using ShiroBot.AvaloniaDemoPlugin.Views;
-using ShiroBot.AvaloniaSdk;
 using ShiroBot.Model.Common;
 using ShiroBot.SDK.Abstractions;
+using ShiroBot.SDK.Avalonia;
 using ShiroBot.SDK.Core;
 using ShiroBot.SDK.Plugin;
 
@@ -18,12 +18,12 @@ namespace ShiroBot.AvaloniaDemoPlugin;
 
 [BotPlugin(id: "AvaloniaDemoPlugin",
     Name = "AvaloniaDemoPlugin",
-    Version = "0.6.0",
+    Version = "0.7.0",
     Author = "ShirokaProject",
     Category = PluginCategory.Development,
-    Description = "演示通过独立 .axaml UserControl + AvaloniaIntegration 渲染图片。",
+    Description = "演示通过独立 .axaml UserControl 使用宿主内置 Avalonia 渲染图片。",
     GithubRepo = "ShirokaProject/Shirobot.Plugin.AvaloniaDemo",
-    IsPluginSingleFile = false)
+    IsPluginSingleFile = true)
 ]
 public sealed class AvaloniaDemoPlugin : PluginBase
 {
@@ -31,7 +31,6 @@ public sealed class AvaloniaDemoPlugin : PluginBase
     private AvaloniaDemoPluginConfig? _config;
     protected override Task LoadAsync()
     {
-        BotLog.Error("HELLO123");
         _config = Context.Config.Load<AvaloniaDemoPluginConfig>();
         AllCommands.MapExact("#render", HandleRenderAsync);
         BotLog.Info("[AvaloniaDemoPlugin] 已加载，使用 #render 触发截图。");
@@ -47,27 +46,23 @@ public sealed class AvaloniaDemoPlugin : PluginBase
             _ => 0L
         };
         
-        if (_config is { ShowId: false })
-        {
-            id = 0L;
-        }
-        
-        var segment = await RenderAsync(id.ToString()).ConfigureAwait(false);
+        var segment = await RenderAsync(id.ToString(), _config?.ShowId ?? true).ConfigureAwait(false);
         if (segment is null)
         {
-            await Context.Message.ReplyAsync(message, "宿主未启用 Avalonia 渲染（EnableAvalonia=false），无法渲染图片。");
+            await Context.Message.ReplyAsync(message, "宿主未提供 Avalonia 渲染服务，无法渲染图片。");
             return;
         }
 
         await Context.Message.ReplyAsync(message, segment);
     }
 
-    private async Task<ImageOutgoingSegment?> RenderAsync(string requestedBy)
+    private async Task<ImageOutgoingSegment?> RenderAsync(string requestedBy, bool showRequestedBy)
     {
         var vm = new ScreenshotViewModel
         {
             Title = "ShiroBot Screenshot",
             RequestedBy = requestedBy,
+            ShowRequestedBy = showRequestedBy,
             Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
             Footer = $"AvaloniaDemoPlugin v{GetType().Assembly.GetName().Version}"
         };

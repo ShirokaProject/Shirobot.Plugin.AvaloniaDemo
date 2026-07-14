@@ -26,19 +26,40 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Checkout ShiroBot SDK source
+        uses: actions/checkout@v4
+        with:
+          repository: ShirokaProject/ShiroBot
+          path: shirobot-core
+          ref: master
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
+      - name: Pack current SDK
+        run: |
+          dotnet pack shirobot-core/ShiroBot.Model/ShiroBot.Model.csproj -c Release -o artifacts/nuget
+          dotnet pack shirobot-core/ShiroBot.SDK/ShiroBot.SDK.csproj -c Release -o artifacts/nuget
+
+      - name: Restore
+        run: >-
+          dotnet restore ShiroBot.AvaloniaDemoPlugin.csproj
+          -p:UseLocalShiroBotSdk=false
+          --source artifacts/nuget
+          --source https://api.nuget.org/v3/index.json
+
       - name: Publish
-        run: dotnet publish "$PROJECT_DIR" --configuration Release
+        run: dotnet publish ShiroBot.AvaloniaDemoPlugin.csproj --configuration Release --no-restore -p:UseLocalShiroBotSdk=false
+
+      - name: Verify Plugin Package
+        run: bash .github/scripts/verify-publish.sh "$PUBLISH_DIR" ShiroBot.AvaloniaDemoPlugin.dll
 
       - name: Collect Plugin DLL
         shell: bash
         run: |
-          PROJECT="$(basename "$(ls *.csproj | head -1)" .csproj)"
-          PLUGIN_DLL="$PUBLISH_DIR/${PROJECT}.dll"
+          PLUGIN_DLL="$PUBLISH_DIR/ShiroBot.AvaloniaDemoPlugin.dll"
           if [ ! -f "$PLUGIN_DLL" ]; then
             echo "Plugin DLL not found: $PLUGIN_DLL"
             ls -la "$PUBLISH_DIR"

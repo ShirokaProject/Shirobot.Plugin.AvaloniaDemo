@@ -6,8 +6,9 @@ namespace ShiroBot.AvaloniaDemoPlugin.Views;
 /// </summary>
 public sealed class ScreenshotViewModel
 {
-    public required string Title { get; init; }
-    public required string RequestedBy { get; init; }
-    public required string Timestamp { get; init; }
-    public required string Footer { get; init; }
+    public string Title { get; init; } = string.Empty;
+    public string RequestedBy { get; init; } = string.Empty;
+    public bool ShowRequestedBy { get; init; } = true;
+    public string Timestamp { get; init; } = string.Empty;
+    public string Footer { get; init; } = string.Empty;
 }
