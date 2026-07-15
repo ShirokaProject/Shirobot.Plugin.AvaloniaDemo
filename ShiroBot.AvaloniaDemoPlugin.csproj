@@ -4,22 +4,14 @@
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Version>0.7.0</Version>
+        <Version>0.7.1</Version>
         <GenerateDependencyFile>false</GenerateDependencyFile>
         <ShiroBotAvaloniaPreviewerSupport Condition="'$(Configuration)' != 'Release'">true</ShiroBotAvaloniaPreviewerSupport>
-        <UseLocalShiroBotSdk Condition="'$(UseLocalShiroBotSdk)' == ''">true</UseLocalShiroBotSdk>
-        <ShiroBotSdkVersion Condition="'$(ShiroBotSdkVersion)' == ''">0.7.0</ShiroBotSdkVersion>
-        <DefaultItemExcludes>$(DefaultItemExcludes);shirobot-core/**</DefaultItemExcludes>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(UseLocalShiroBotSdk)' == 'true' and Exists('../ShiroBot/ShiroBot.SDK/ShiroBot.SDK.csproj')">
-        <ProjectReference Include="../ShiroBot/ShiroBot.SDK/ShiroBot.SDK.csproj" />
-        <ProjectReference Include="../ShiroBot/ShiroBot.AvaloniaSdk/ShiroBot.AvaloniaSdk.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(UseLocalShiroBotSdk)' != 'true' or !Exists('../ShiroBot/ShiroBot.SDK/ShiroBot.SDK.csproj')">
-        <PackageReference Include="ShiroBot.SDK" Version="$(ShiroBotSdkVersion)" />
-        <PackageReference Include="ShiroBot.AvaloniaSdk" Version="$(ShiroBotSdkVersion)" />
+    <ItemGroup>
+        <PackageReference Include="ShiroBot.SDK" Version="0.7.1" />
+        <PackageReference Include="ShiroBot.AvaloniaSdk" Version="0.7.1" />
     </ItemGroup>
 
 </Project>

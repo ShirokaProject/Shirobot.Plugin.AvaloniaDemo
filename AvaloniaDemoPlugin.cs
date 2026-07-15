@@ -18,7 +18,7 @@ namespace ShiroBot.AvaloniaDemoPlugin;
 
 [BotPlugin(id: "AvaloniaDemoPlugin",
     Name = "AvaloniaDemoPlugin",
-    Version = "0.7.0",
+    Version = "0.7.1",
     Author = "ShirokaProject",
     Category = PluginCategory.Development,
     Description = "演示通过独立 .axaml UserControl 使用宿主内置 Avalonia 渲染图片。",

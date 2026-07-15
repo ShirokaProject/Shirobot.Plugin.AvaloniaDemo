@@ -26,33 +26,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Checkout ShiroBot SDK source
-        uses: actions/checkout@v4
-        with:
-          repository: ShirokaProject/ShiroBot
-          path: shirobot-core
-          ref: master
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
-      - name: Pack current SDK
-        run: |
-          dotnet pack shirobot-core/ShiroBot.Model/ShiroBot.Model.csproj -c Release -o artifacts/nuget
-          dotnet pack shirobot-core/ShiroBot.SDK/ShiroBot.SDK.csproj -c Release -o artifacts/nuget
-          dotnet pack shirobot-core/ShiroBot.AvaloniaSdk/ShiroBot.AvaloniaSdk.csproj -c Release -o artifacts/nuget
-
       - name: Restore
-        run: >-
-          dotnet restore ShiroBot.AvaloniaDemoPlugin.csproj
-          -p:UseLocalShiroBotSdk=false
-          --source artifacts/nuget
-          --source https://api.nuget.org/v3/index.json
+        run: dotnet restore ShiroBot.AvaloniaDemoPlugin.csproj
 
       - name: Publish
-        run: dotnet publish ShiroBot.AvaloniaDemoPlugin.csproj --configuration Release --no-restore -p:UseLocalShiroBotSdk=false
+        run: dotnet publish ShiroBot.AvaloniaDemoPlugin.csproj --configuration Release --no-restore
 
       - name: Verify Plugin Package
         run: bash .github/scripts/verify-publish.sh "$PUBLISH_DIR" ShiroBot.AvaloniaDemoPlugin.dll
